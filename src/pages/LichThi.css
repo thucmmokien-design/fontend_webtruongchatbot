@@ -24,21 +24,21 @@
   border-radius: 12px;
   box-shadow: var(--shadow-lg);
   margin-bottom: 25px;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 160px;
+  gap: 25px;
   align-items: center;
-  gap: 20px;
 }
 
 .filter-left {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  flex: 1;
 }
 
 .filter-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: 140px 1fr;
   align-items: center;
   gap: 15px;
 }
@@ -46,50 +46,60 @@
 .filter-row label {
   font-weight: 600;
   color: var(--color-text-secondary);
-  min-width: 120px;
   font-size: 15px;
+  text-align: left;
 }
 
 .filter-row select {
-  padding: 8px 15px;
+  padding: 10px 15px;
   border: 2px solid var(--color-primary-light);
   border-radius: 8px;
   font-size: 14px;
-  min-width: 200px;
   background: var(--color-bg-primary);
   cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
 }
 
 .filter-row select:focus {
   outline: none;
   border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .filter-actions {
+  margin-bottom: 35px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 21px;
+  justify-content: center;
 }
 
 .btn-view-exam,
 .btn-print {
-  padding: 10px 30px;
+  padding: 10px 20px;
   border: none;
   border-radius: 8px;
-  font-weight: bold;
+  font-weight: 600;
+  font-size: 14px;
   cursor: pointer;
   transition: all 0.3s ease;
   background: var(--gradient-primary);
   color: white;
-  font-size: 13px;
   white-space: nowrap;
-  min-width: 150px;
+  width: 100%;
+  text-align: center;
 }
 
 .btn-view-exam:hover,
 .btn-print:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-primary-lg);
+}
+
+.btn-view-exam:active,
+.btn-print:active {
+  transform: translateY(0);
 }
 
 .loading,
@@ -209,8 +219,8 @@
 
   .lichthi-filters {
     padding: 20px;
-    flex-direction: column;
-    align-items: stretch;
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
 
   .filter-left {
@@ -218,25 +228,22 @@
   }
 
   .filter-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+    grid-template-columns: 140px 1fr;
   }
 
   .filter-row label {
-    min-width: auto;
     font-size: 14px;
   }
 
   .filter-row select {
-    width: 100%;
     font-size: 14px;
   }
 
   .filter-actions {
-    width: 100%;
     flex-direction: row;
+    flex-wrap: wrap;
     gap: 10px;
+    align-self: stretch;
   }
 
   .btn-view-exam,
