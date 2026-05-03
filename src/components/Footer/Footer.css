@@ -1,0 +1,165 @@
+.col-3 .logo img {
+    width: 100%;
+    height: 100%;
+}
+ul{
+    list-style-type: none;
+}
+.contact-info-one img{
+    width :25px;
+    height:25px;
+}
+.contact_mobile .content-mobile{
+    color: var(--color-danger);
+}
+.col-2{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.contact-info-two ul{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px
+}
+.contact-info-two img{
+    width :37px;
+    height:37px;
+}
+
+.contact-info-three img {
+    width :25px;
+    height:25px;
+}
+.contact-info-three .contact-top{
+    color: aliceblue;
+    text-align: center;
+    background-color: var(--coler-one);
+    border-radius: 20px;
+    padding: 10px 32px;
+    margin-bottom: 10px;
+}
+.contact-info-three .contact_bottom ul{
+    text-align: left;
+}
+.contact_end{
+    color: var(--coler-texthint);
+    text-align: center;
+    font-size: 10px
+}
+.contact_end img{
+    width: 20px;
+    height: 20px;
+}
+
+
+/* Responsive Design for Footer */
+@media (max-width: 1024px) {
+  .contact-info-two ul {
+    gap: 8px;
+  }
+
+  .contact-info-two img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .contact-info-three .contact-top {
+    padding: 8px 24px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .col-3,
+  .col-2 {
+    margin-bottom: 20px;
+  }
+
+  .col-3 .logo img {
+    max-width: 150px;
+    margin: 0 auto;
+    display: block;
+  }
+
+  .contact-info-one,
+  .contact-info-three {
+    font-size: 14px;
+  }
+
+  .contact-info-one img,
+  .contact-info-three img {
+    width: 20px;
+    height: 20px;
+  }
+
+  .contact-info-two ul {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .contact-info-two img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .contact-info-three .contact-top {
+    padding: 8px 20px;
+    font-size: 13px;
+  }
+
+  .contact_end {
+    font-size: 9px;
+  }
+
+  .contact_end img {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .col-3 .logo img {
+    max-width: 120px;
+  }
+
+  .contact-info-one,
+  .contact-info-three {
+    font-size: 12px;
+  }
+
+  .contact-info-one img,
+  .contact-info-three img {
+    width: 18px;
+    height: 18px;
+  }
+
+  .contact-info-two ul {
+    gap: 10px;
+  }
+
+  .contact-info-two img {
+    width: 28px;
+    height: 28px;
+  }
+
+  .contact-info-three .contact-top {
+    padding: 6px 16px;
+    font-size: 12px;
+  }
+
+  .contact-info-three .contact_bottom ul {
+    padding-left: 10px;
+  }
+
+  .contact_end {
+    font-size: 8px;
+  }
+
+  .contact_end img {
+    width: 16px;
+    height: 16px;
+  }
+}

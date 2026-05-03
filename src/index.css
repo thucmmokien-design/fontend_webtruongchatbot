@@ -1,0 +1,87 @@
+:root{
+    /* Màu chính - Xanh dương */
+    --color-primary: #4BA7D5;
+    --color-primary-dark: #0093DD;
+    --color-primary-light: #A1DDFB;
+    --color-primary-lighter: #e3f2fd;
+    --color-primary-lightest: #bbdefb;
+    
+    /* Màu phụ */
+    --color-success: #10b981;
+    --color-success-light: #d1fae5;
+    --color-success-dark: #059669;
+    --color-success-text: #065f46;
+    --color-danger: #ef4444;
+    --color-danger-light: #fee2e2;
+    --color-danger-dark: #dc2626;
+    --color-danger-lighter: #ee5a6f;
+    --color-danger-text: #991b1b;
+    --color-warning: #f59e0b;
+    --color-warning-light: #fef3c7;
+    --color-warning-lighter: #fde68a;
+    --color-warning-dark: #d97706;
+    --color-warning-text: #92400e;
+    --color-info: #3b82f6;
+    --color-info-dark: #2563eb;
+    --color-info-darker: #1e40af;
+    
+    /* Màu nền */
+    --color-bg-primary: #ffffff;
+    --color-bg-secondary: #f8f9fa;
+    --color-bg-tertiary: #e9ecef;
+    --color-bg-light: #fafbfc;
+    
+    /* Màu text */
+    --color-text-primary: #000000;
+    --color-text-secondary: #2d3748;
+    --color-text-tertiary: #4a5568;
+    --color-text-muted: #718096;
+    --color-text-hint: #706f6f;
+    --color-text-light: #999999;
+    
+    /* Màu border */
+    --color-border: #dee2e6;
+    --color-border-light: #cbd5e1;
+    
+    /* Gradient */
+    --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    --gradient-primary-hover: linear-gradient(135deg, var(--color-info-dark) 0%, var(--color-info-darker) 100%);
+    --gradient-bg: linear-gradient(135deg, var(--color-primary-lighter) 0%, var(--color-primary-lightest) 100%);
+    --gradient-card: linear-gradient(135deg, var(--color-bg-secondary) 0%, var(--color-bg-tertiary) 100%);
+    --gradient-danger: linear-gradient(135deg, var(--color-danger) 0%, var(--color-danger-lighter) 100%);
+    
+    /* Shadow */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 10px 40px rgba(0, 0, 0, 0.2);
+    --shadow-primary: 0 4px 12px rgba(75, 167, 213, 0.3);
+    --shadow-primary-lg: 0 4px 12px rgba(75, 167, 213, 0.4);
+    
+    /* Font */
+    --font-family: 'Josefin Sans', sans-serif;
+    
+    /* Legacy support (giữ lại để không break code cũ) */
+    --coler-one: var(--color-primary-light);
+    --coler-two: var(--color-primary);
+    --coler-texthint: var(--color-text-hint);
+    --coler-text: var(--color-text-primary);
+}
+
+*{
+    font-family: var(--font-family);
+}
+
+a{
+    text-decoration: none;
+    color: inherit;
+}
+
+::placeholder {
+    color: var(--color-text-light);
+    font-size: 12px;
+}
+
+li a {
+  text-decoration: none;
+}

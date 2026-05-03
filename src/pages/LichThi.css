@@ -1,0 +1,384 @@
+.lichthi-container {
+  padding: 20px;
+  min-height: calc(100vh - 200px);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.lichthi-content {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.lichthi-title {
+  text-align: center;
+  color: var(--color-primary-dark);
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+.lichthi-filters {
+  background: var(--color-primary-lighter);
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  margin-bottom: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.filter-left {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  flex: 1;
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.filter-row label {
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  min-width: 120px;
+  font-size: 15px;
+}
+
+.filter-row select {
+  padding: 8px 15px;
+  border: 2px solid var(--color-primary-light);
+  border-radius: 8px;
+  font-size: 14px;
+  min-width: 200px;
+  background: var(--color-bg-primary);
+  cursor: pointer;
+}
+
+.filter-row select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.filter-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.btn-view-exam,
+.btn-print {
+  padding: 10px 30px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: var(--gradient-primary);
+  color: white;
+  font-size: 13px;
+  white-space: nowrap;
+  min-width: 150px;
+}
+
+.btn-view-exam:hover,
+.btn-print:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-primary-lg);
+}
+
+.loading,
+.no-data {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+  color: var(--color-text-muted);
+}
+
+.exam-table-wrapper {
+  background: var(--color-bg-primary);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin-bottom: 25px;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
+.exam-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+.exam-table-wrapper::-webkit-scrollbar {
+  height: 10px;
+}
+
+.exam-table-wrapper::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+  border-radius: 10px;
+}
+
+.exam-table-wrapper::-webkit-scrollbar-thumb {
+  background: var(--gradient-primary);
+  border-radius: 10px;
+}
+
+.exam-table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-dark);
+}
+
+.exam-table thead {
+  background: var(--gradient-primary);
+  color: white;
+}
+
+.exam-table th {
+  padding: 15px 10px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 14px;
+  border: 1px solid var(--color-border);
+}
+
+.exam-table td {
+  padding: 12px 10px;
+  border: 1px solid var(--color-border);
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.exam-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.exam-table tbody tr:hover {
+  background-color: var(--color-bg-secondary);
+}
+
+.exam-table tbody tr:nth-child(even) {
+  background-color: var(--color-bg-light);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+/* Print styles */
+@media print {
+  .lichthi-filters,
+  .btn-print {
+    display: none;
+  }
+
+  .lichthi-container {
+    padding: 10px;
+  }
+
+  .exam-table-wrapper {
+    box-shadow: none;
+  }
+
+  .exam-table {
+    min-width: auto;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .lichthi-container {
+    padding: 15px;
+  }
+
+  .lichthi-title {
+    font-size: 26px;
+    margin-bottom: 20px;
+  }
+
+  .lichthi-filters {
+    padding: 20px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-left {
+    width: 100%;
+  }
+
+  .filter-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .filter-row label {
+    min-width: auto;
+    font-size: 14px;
+  }
+
+  .filter-row select {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  .filter-actions {
+    width: 100%;
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .btn-view-exam,
+  .btn-print {
+    flex: 1;
+    min-width: auto;
+  }
+
+  .exam-table {
+    min-width: 800px;
+  }
+
+  .exam-table th,
+  .exam-table td {
+    padding: 10px 8px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .lichthi-container {
+    padding: 12px;
+  }
+
+  .lichthi-title {
+    font-size: 22px;
+    margin-bottom: 15px;
+  }
+
+  .lichthi-filters {
+    padding: 15px;
+  }
+
+  .filter-left {
+    gap: 12px;
+  }
+
+  .filter-row {
+    margin-bottom: 0;
+  }
+
+  .filter-row label {
+    font-size: 13px;
+  }
+
+  .filter-row select {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  .filter-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btn-view-exam,
+  .btn-print {
+    padding: 8px 20px;
+    font-size: 13px;
+    width: 100%;
+  }
+
+  .exam-table-wrapper {
+    margin-bottom: 20px;
+  }
+
+  .exam-table {
+    min-width: 750px;
+  }
+
+  .exam-table th,
+  .exam-table td {
+    padding: 8px 6px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .lichthi-container {
+    padding: 10px;
+  }
+
+  .lichthi-title {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+
+  .lichthi-filters {
+    padding: 12px;
+  }
+
+  .filter-left {
+    gap: 10px;
+  }
+
+  .filter-row label {
+    font-size: 12px;
+  }
+
+  .filter-row select {
+    padding: 5px 10px;
+    font-size: 12px;
+    min-width: auto;
+  }
+
+  .filter-actions {
+    gap: 8px;
+  }
+
+  .btn-view-exam,
+  .btn-print {
+    padding: 6px 15px;
+    font-size: 12px;
+  }
+
+  .exam-table-wrapper {
+    margin-bottom: 15px;
+  }
+
+  .exam-table {
+    min-width: 700px;
+  }
+
+  .exam-table th,
+  .exam-table td {
+    padding: 6px 4px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 360px) {
+  .lichthi-title {
+    font-size: 16px;
+  }
+
+  .exam-table {
+    min-width: 650px;
+  }
+
+  .exam-table th,
+  .exam-table td {
+    padding: 5px 3px;
+    font-size: 10px;
+  }
+}

@@ -1,0 +1,246 @@
+.contentfull {
+  min-height: 100vh;
+  width: 100%;
+  padding: 20px;
+  background: 
+    linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+    url("../assets/img/anhtruong1.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.innerwarTop {
+  text-align: center;
+  margin-bottom: 30px;
+  animation: fadeInDown 0.8s ease-out;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.innerwarTop img {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 15px;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.innerwarTop span {
+  display: block;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.innerwarBottom {
+  width: 100%;
+  max-width: 450px;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 20px;
+  box-shadow: var(--shadow-xl);
+  backdrop-filter: blur(10px);
+  animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.innerwarBottom h3 {
+  text-align: center;
+  color: var(--color-primary-dark);
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  padding: 0;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  color: var(--color-primary-dark);
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+.innerwarBottom input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid var(--color-border-light);
+  border-radius: 10px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background: var(--color-bg-light);
+  margin-bottom: 0;
+}
+
+.innerwarBottom input:focus {
+  outline: none;
+  border-color: var(--color-info);
+  background: var(--color-bg-primary);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+  transform: translateY(-2px);
+}
+
+.innerwarBottom input::placeholder {
+  color: var(--color-text-light);
+}
+
+.contenNotPassword {
+  text-align: right;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.contenNotPassword a {
+  color: var(--color-info);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.contenNotPassword a:hover {
+  color: var(--color-info-dark);
+  text-decoration: underline;
+}
+
+.btn-login {
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 10px;
+  background: var(--gradient-primary);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-primary);
+}
+
+.btn-login:hover {
+  background: var(--gradient-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-primary-lg);
+}
+
+.btn-login:active {
+  transform: translateY(0);
+}
+
+.innerwarBottom p {
+  text-align: center;
+  margin-top: 15px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .contentfull {
+    padding: 15px;
+  }
+
+  .innerwarTop span {
+    font-size: 18px;
+  }
+
+  .innerwarTop img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .innerwarBottom {
+    max-width: 100%;
+    padding: 30px 20px;
+  }
+
+  .innerwarBottom h3 {
+    font-size: 24px;
+  }
+
+  .innerwarBottom input {
+    padding: 12px 14px;
+    font-size: 14px;
+  }
+
+  .btn-login {
+    padding: 12px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .innerwarTop span {
+    font-size: 16px;
+  }
+
+  .innerwarTop img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .innerwarBottom {
+    padding: 25px 15px;
+  }
+
+  .innerwarBottom h3 {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .innerwarBottom input {
+    padding: 10px 12px;
+  }
+}
+
+/* Loading state */
+.btn-login:disabled {
+  background: var(--color-text-light);
+  cursor: not-allowed;
+  transform: none;
+}
