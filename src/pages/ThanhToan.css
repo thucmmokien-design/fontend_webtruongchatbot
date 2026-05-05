@@ -25,35 +25,105 @@
   border-radius: 12px;
   box-shadow: var(--shadow-lg);
   margin-bottom: 25px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 25px;
+  align-items: center;
+}
+
+.filters-group {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
 }
 
 .filter-row {
   display: flex;
   align-items: center;
   gap: 15px;
-  margin-bottom: 15px;
+  width: 100%;
 }
 
 .filter-row label {
   font-weight: 600;
   color: var(--color-text-secondary);
-  min-width: 100px;
+  min-width: 80px;
   font-size: 15px;
 }
 
 .filter-row select {
-  padding: 8px 15px;
+  flex: 1;
+  padding: 10px 15px;
   border: 2px solid var(--color-primary-light);
   border-radius: 8px;
   font-size: 14px;
-  min-width: 200px;
   background: var(--color-bg-primary);
   cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
 }
 
 .filter-row select:focus {
   outline: none;
   border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.button-group {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: center;
+}
+
+.btn-back {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: var(--gradient-primary);
+  color: white;
+  white-space: nowrap;
+}
+
+.btn-back:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-primary-lg);
+}
+
+.btn-back:active {
+  transform: translateY(0);
+}
+
+.btn-print-invoice {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 6px rgba(16, 185, 129, 0.3);
+}
+
+.btn-print-invoice:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.5);
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+
+.btn-print-invoice:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
 }
 
 /* Section Title */
@@ -141,6 +211,29 @@
   text-align: right !important;
 }
 
+/* Total Amount Section - Centered */
+.total-amount-section {
+  text-align: center;
+  padding: 30px 20px;
+  margin: 30px 0;
+  background: var(--color-bg-primary);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+}
+
+.total-label {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-right: 15px;
+}
+
+.total-value {
+  font-size: 32px;
+  font-weight: bold;
+  color: var(--color-danger);
+}
+
 /* Payment Summary Section */
 .payment-summary {
   display: grid;
@@ -200,20 +293,22 @@
   align-items: center;
 }
 
-.total-amount {
+.qr-image-container {
   width: 100%;
-  text-align: right;
+  max-width: 300px;
   margin-bottom: 20px;
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--color-text-secondary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.total-amount span {
-  color: var(--color-danger);
-  font-size: 20px;
-  font-weight: bold;
-  margin-left: 10px;
+.qr-image {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: white;
+  padding: 10px;
 }
 
 .qr-placeholder {
@@ -233,6 +328,49 @@
   font-weight: bold;
   font-size: 16px;
   text-align: center;
+  margin-bottom: 20px;
+}
+
+.bank-info {
+  width: 100%;
+  max-width: 350px;
+  background: var(--color-bg-secondary);
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+}
+
+.bank-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.bank-info-row:last-child {
+  border-bottom: none;
+}
+
+.bank-info-label {
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  min-width: 110px;
+}
+
+.bank-info-value {
+  font-weight: 500;
+  color: var(--color-text-primary);
+  font-size: 13px;
+  text-align: right;
+  word-break: break-word;
+}
+
+.bank-info-value.highlight {
+  color: var(--color-danger);
+  font-weight: bold;
+  font-size: 15px;
 }
 
 .no-data {
@@ -240,6 +378,114 @@
   padding: 40px;
   font-size: 16px;
   color: var(--color-text-muted);
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  font-size: 16px;
+  color: var(--color-text-muted);
+}
+
+/* Print Styles */
+@media print {
+  .top-actions,
+  .payment-filters,
+  .btn-back,
+  .btn-print-invoice {
+    display: none !important;
+  }
+
+  .thanhtoan-container {
+    padding: 10px;
+  }
+
+  .thanhtoan-content {
+    max-width: 100%;
+  }
+
+  .table-wrapper {
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  .payment-table {
+    min-width: auto;
+    width: 100%;
+    border: 2px solid #000;
+  }
+
+  .payment-table th,
+  .payment-table td {
+    border: 1px solid #000;
+    padding: 8px 5px;
+    font-size: 11px;
+    color: #000;
+    background: white !important;
+  }
+
+  .payment-table thead {
+    background: #e5e7eb !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .total-amount-section {
+    background: white !important;
+    border: 2px solid #000;
+    page-break-inside: avoid;
+  }
+
+  .total-label,
+  .total-value {
+    color: #000 !important;
+  }
+
+  .payment-summary {
+    page-break-inside: avoid;
+  }
+
+  .payment-instructions {
+    background: #f3f4f6 !important;
+    border: 1px solid #000;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .qr-section {
+    background: white !important;
+    border: 1px solid #000;
+  }
+
+  .qr-image-container {
+    max-width: 250px;
+  }
+
+  .qr-image {
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+
+  .qr-placeholder {
+    border: 2px solid #000;
+    background: white !important;
+  }
+
+  .bank-info {
+    background: #f3f4f6 !important;
+    border: 1px solid #000;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .bank-info-row {
+    border-bottom: 1px solid #ccc;
+  }
+
+  .bank-info-label,
+  .bank-info-value {
+    color: #000 !important;
+  }
 }
 
 /* Responsive Design */
@@ -251,6 +497,23 @@
   .thanhtoan-title {
     font-size: 26px;
     margin-bottom: 20px;
+  }
+
+  .payment-filters {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .filters-group {
+    width: 100%;
+  }
+
+  .filter-row select {
+    max-width: 100%;
+  }
+
+  .btn-print-invoice {
+    width: 100%;
   }
 
   .payment-summary {
@@ -279,6 +542,15 @@
     margin-bottom: 15px;
   }
 
+  .top-actions {
+    margin-bottom: 15px;
+  }
+
+  .btn-back {
+    width: 100%;
+    padding: 10px 20px;
+  }
+
   .payment-filters {
     padding: 15px;
   }
@@ -299,6 +571,25 @@
     font-size: 13px;
   }
 
+  .btn-print-invoice {
+    width: 100%;
+  }
+
+  .total-amount-section {
+    padding: 20px 15px;
+    margin: 20px 0;
+  }
+
+  .total-label {
+    font-size: 16px;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .total-value {
+    font-size: 24px;
+  }
+
   .payment-instructions {
     padding: 15px;
   }
@@ -315,12 +606,8 @@
     padding: 15px;
   }
 
-  .total-amount {
-    font-size: 14px;
-  }
-
-  .total-amount span {
-    font-size: 18px;
+  .qr-image-container {
+    max-width: 250px;
   }
 
   .qr-placeholder {
@@ -330,6 +617,20 @@
 
   .qr-text {
     font-size: 14px;
+  }
+
+  .bank-info {
+    max-width: 100%;
+    padding: 12px;
+  }
+
+  .bank-info-label {
+    font-size: 12px;
+    min-width: 100px;
+  }
+
+  .bank-info-value {
+    font-size: 12px;
   }
 
   .payment-table {
@@ -371,6 +672,19 @@
     font-size: 14px;
   }
 
+  .total-amount-section {
+    padding: 15px 10px;
+    margin: 15px 0;
+  }
+
+  .total-label {
+    font-size: 14px;
+  }
+
+  .total-value {
+    font-size: 20px;
+  }
+
   .payment-instructions {
     padding: 12px;
   }
@@ -392,12 +706,8 @@
     padding: 12px;
   }
 
-  .total-amount {
-    font-size: 13px;
-  }
-
-  .total-amount span {
-    font-size: 16px;
+  .qr-image-container {
+    max-width: 200px;
   }
 
   .qr-placeholder {
@@ -406,6 +716,23 @@
   }
 
   .qr-text {
+    font-size: 13px;
+  }
+
+  .bank-info {
+    padding: 10px;
+  }
+
+  .bank-info-label {
+    font-size: 11px;
+    min-width: 90px;
+  }
+
+  .bank-info-value {
+    font-size: 11px;
+  }
+
+  .bank-info-value.highlight {
     font-size: 13px;
   }
 
@@ -427,6 +754,10 @@
 
   .payment-table {
     min-width: 600px;
+  }
+
+  .qr-image-container {
+    max-width: 180px;
   }
 
   .qr-placeholder {
