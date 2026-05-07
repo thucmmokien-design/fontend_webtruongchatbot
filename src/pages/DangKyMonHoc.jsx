@@ -1,135 +1,186 @@
 import { useState, useEffect } from 'react'
 import './DangKyMonHoc.css'
+import { studentService } from '../services/studentService'
+import { dangKyMonHocService } from '../services/dangKyMonHocService'
 
 const DangKyMonHoc = () => {
   const [loading, setLoading] = useState(false);
+  const [maSV, setMaSV] = useState('');
   const [selectedCourses, setSelectedCourses] = useState([]);
+  const [availableCourses, setAvailableCourses] = useState([]);
+  const [pendingCourses, setPendingCourses] = useState([]);
 
-  // Mock data - Danh sách các học phần được đăng ký
-  const [registeredCourses, setRegisteredCourses] = useState([
-    {
-      stt: 1,
-      maHP: 'TH5220',
-      tenHP: 'Đa phương tiện',
-      soTC: 3,
-      tenLop: '23CN3',
-      thoiGian: '10/10/2026-03/01/2027',
-      tiet: '2-6',
-      thu: 3,
-      soLuong: 55,
-      conTrong: 15,
-      giangVien: 'Nguyễn Mạnh Hùng'
-    },
-    {
-      stt: 2,
-      maHP: 'TH5223',
-      tenHP: 'An ninh mạng',
-      soTC: 3,
-      tenLop: '23CN3',
-      thoiGian: '10/10/2026-03/01/2027',
-      tiet: '7-9',
-      thu: 3,
-      soLuong: 54,
-      conTrong: 36,
-      giangVien: 'Bùi Hải Phong'
+  // Load mã sinh viên khi component mount
+  useEffect(() => {
+    const loadStudentInfo = async () => {
+      try {
+        const studentInfo = await studentService.getMyInfo();
+        if (studentInfo.success && studentInfo.data) {
+          setMaSV(studentInfo.data.maSV);
+        }
+      } catch (error) {
+        console.error('Lỗi khi tải thông tin sinh viên:', error);
+      }
+    };
+
+    loadStudentInfo();
+  }, []);
+
+  // Load danh sách lớp học và danh sách đăng ký khi có maSV
+  useEffect(() => {
+    if (maSV) {
+      loadDanhSachLopHoc();
+      loadDanhSachDangKy();
     }
-  ]);
+  }, [maSV]);
 
-  // Mock data - Danh sách các học phần chờ phê duyệt (có thể hủy)
-  const [pendingCourses, setPendingCourses] = useState([
-    {
-      stt: 1,
-      maHP: 'TH5220',
-      tenHP: 'Lập trình mạng',
-      soTC: 3,
-      tenLop: '23CN3',
-      thoiGian: '10/10/2026-03/01/2027',
-      tiet: '4-6',
-      thu: 2,
-      giangVien: 'Nguyễn Hồng Thanh'
-    },
-    {
-      stt: 2,
-      maHP: 'TH5223',
-      tenHP: 'Đồ họa và hiện thực ảo',
-      soTC: 3,
-      tenLop: '23CN3',
-      thoiGian: '10/10/2026-03/01/2027',
-      tiet: '10-12',
-      thu: 4,
-      giangVien: 'Nguyễn Quốc Huy'
+  // Load danh sách lớp học có thể đăng ký
+  const loadDanhSachLopHoc = async () => {
+    setLoading(true);
+    try {
+      const result = await dangKyMonHocService.getDanhSachLopHoc();
+      console.log('Danh sách lớp học:', result);
+      
+      const code = result.code || result.Code;
+      if (code === 200 && result.result) {
+        setAvailableCourses(result.result);
+      } else {
+        setAvailableCourses([]);
+      }
+    } catch (error) {
+      console.error('Lỗi khi tải danh sách lớp học:', error);
+      setAvailableCourses([]);
+    } finally {
+      setLoading(false);
     }
-  ]);
+  };
 
-  const handleSelectCourse = (course, isRegistered) => {
-    const courseId = `${course.maHP}-${course.tenLop}`;
-    
-    if (selectedCourses.includes(courseId)) {
-      setSelectedCourses(selectedCourses.filter(id => id !== courseId));
+  // Load danh sách đăng ký của sinh viên
+  const loadDanhSachDangKy = async () => {
+    try {
+      const result = await dangKyMonHocService.getDanhSachDangKy(maSV);
+      console.log('Danh sách đăng ký:', result);
+      
+      const code = result.code || result.Code;
+      if (code === 200 && result.result) {
+        setPendingCourses(result.result);
+      } else {
+        setPendingCourses([]);
+      }
+    } catch (error) {
+      console.error('Lỗi khi tải danh sách đăng ký:', error);
+      setPendingCourses([]);
+    }
+  };
+
+  const handleSelectCourse = (maMo) => {
+    if (selectedCourses.includes(maMo)) {
+      setSelectedCourses(selectedCourses.filter(id => id !== maMo));
     } else {
-      setSelectedCourses([...selectedCourses, courseId]);
+      setSelectedCourses([...selectedCourses, maMo]);
     }
   };
 
-  const isCourseSelected = (course) => {
-    const courseId = `${course.maHP}-${course.tenLop}`;
-    return selectedCourses.includes(courseId);
+  const isCourseSelected = (maMo) => {
+    return selectedCourses.includes(maMo);
   };
 
-  const handleCancelRegistration = () => {
+  const handleConfirmRegistration = async () => {
     if (selectedCourses.length === 0) {
-      alert('Vui lòng chọn ít nhất một học phần để hủy');
+      alert('Vui lòng chọn ít nhất một học phần để đăng ký');
       return;
     }
     
-    const confirmCancel = window.confirm(`Bạn có chắc chắn muốn hủy ${selectedCourses.length} học phần đã chọn?`);
-    if (confirmCancel) {
-      // Xử lý hủy đăng ký
-      alert('Đã hủy đăng ký các học phần đã chọn');
-      setSelectedCourses([]);
-    }
-  };
+    const confirmRegister = window.confirm(`Bạn có chắc chắn muốn đăng ký ${selectedCourses.length} học phần đã chọn?`);
+    if (!confirmRegister) return;
 
-  const handleConfirmRegistration = () => {
-    if (selectedCourses.length === 0) {
-      alert('Vui lòng chọn ít nhất một học phần để xác nhận');
-      return;
+    setLoading(true);
+    let successCount = 0;
+    let errorMessages = [];
+
+    for (const maMo of selectedCourses) {
+      try {
+        const result = await dangKyMonHocService.dangKyLopHoc(maSV, maMo);
+        const code = result.code || result.Code;
+        const message = result.message || result.Message;
+        
+        if (code === 200) {
+          successCount++;
+        } else {
+          errorMessages.push(message || 'Lỗi không xác định');
+        }
+      } catch (error) {
+        errorMessages.push('Lỗi kết nối');
+      }
+    }
+
+    setLoading(false);
+    
+    if (successCount > 0) {
+      alert(`Đã đăng ký thành công ${successCount} học phần`);
+      setSelectedCourses([]);
+      // Reload danh sách
+      await loadDanhSachLopHoc();
+      await loadDanhSachDangKy();
     }
     
-    const confirmRegister = window.confirm(`Bạn có chắc chắn muốn xác nhận đăng ký ${selectedCourses.length} học phần đã chọn?`);
-    if (confirmRegister) {
-      // Xử lý xác nhận đăng ký
-      alert('Đã xác nhận đăng ký các học phần đã chọn');
-      setSelectedCourses([]);
+    if (errorMessages.length > 0) {
+      alert(`Có lỗi xảy ra:\n${errorMessages.join('\n')}`);
     }
   };
 
-  const handleCancelPending = () => {
+  const handleCancelPending = async () => {
     if (selectedCourses.length === 0) {
       alert('Vui lòng chọn ít nhất một học phần để hủy');
       return;
     }
     
     const confirmCancel = window.confirm(`Bạn có chắc chắn muốn hủy ${selectedCourses.length} học phần đang chờ phê duyệt?`);
-    if (confirmCancel) {
-      // Xử lý hủy học phần chờ phê duyệt
-      alert('Đã hủy các học phần chờ phê duyệt đã chọn');
+    if (!confirmCancel) return;
+
+    setLoading(true);
+    let successCount = 0;
+    let errorMessages = [];
+
+    for (const idDangKy of selectedCourses) {
+      try {
+        const result = await dangKyMonHocService.huyDangKy(idDangKy);
+        const code = result.code || result.Code;
+        const message = result.message || result.Message;
+        
+        if (code === 200) {
+          successCount++;
+        } else {
+          errorMessages.push(message || 'Lỗi không xác định');
+        }
+      } catch (error) {
+        errorMessages.push('Lỗi kết nối');
+      }
+    }
+
+    setLoading(false);
+    
+    if (successCount > 0) {
+      alert(`Đã hủy thành công ${successCount} học phần`);
       setSelectedCourses([]);
+      // Reload danh sách
+      await loadDanhSachLopHoc();
+      await loadDanhSachDangKy();
+    }
+    
+    if (errorMessages.length > 0) {
+      alert(`Có lỗi xảy ra:\n${errorMessages.join('\n')}`);
     }
   };
 
-  const handleConfirmPending = () => {
-    if (selectedCourses.length === 0) {
-      alert('Vui lòng chọn ít nhất một học phần để xác nhận');
-      return;
-    }
-    
-    const confirmRegister = window.confirm(`Bạn có chắc chắn muốn xác nhận đăng ký ${selectedCourses.length} học phần đã chọn?`);
-    if (confirmRegister) {
-      // Xử lý xác nhận đăng ký học phần chờ phê duyệt
-      alert('Đã xác nhận đăng ký các học phần đã chọn');
-      setSelectedCourses([]);
-    }
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('vi-VN');
+  };
+
+  const formatTiet = (tietBatDau, tietKetThuc) => {
+    return `${tietBatDau}-${tietKetThuc}`;
   };
 
   return (
@@ -149,40 +200,49 @@ const DangKyMonHoc = () => {
             <thead>
               <tr>
                 <th>STT</th>
+                <th>Mã môn</th>
                 <th>Tên học phần</th>
                 <th>Số TC</th>
-                <th>Tên lớp</th>
+                <th>Giảng viên</th>
+                <th>Nhịp</th>
                 <th>Thời gian</th>
                 <th>Tiết</th>
                 <th>Thứ</th>
-                <th>Số lượng</th>
+                <th>Phòng</th>
+                <th>Sĩ số</th>
                 <th>Còn trống</th>
-                <th>Giảng viên</th>
                 <th>Tùy chọn</th>
               </tr>
             </thead>
             <tbody>
-              {registeredCourses.length === 0 ? (
+              {loading ? (
                 <tr>
-                  <td colSpan="11" className="no-data">Không có học phần nào được đăng ký</td>
+                  <td colSpan="13" className="no-data">Đang tải dữ liệu...</td>
+                </tr>
+              ) : availableCourses.length === 0 ? (
+                <tr>
+                  <td colSpan="13" className="no-data">Không có học phần nào được đăng ký</td>
                 </tr>
               ) : (
-                registeredCourses.map((course) => (
-                  <tr key={course.stt}>
-                    <td className="text-center">{course.stt}</td>
-                    <td className="text-left">{course.maHP} - {course.tenHP}</td>
-                    <td className="text-center">{course.soTC}</td>
-                    <td className="text-center">{course.tenLop}</td>
-                    <td className="text-center">{course.thoiGian}</td>
-                    <td className="text-center">{course.tiet}</td>
+                availableCourses.map((course, index) => (
+                  <tr key={course.maMo}>
+                    <td className="text-center">{index + 1}</td>
+                    <td className="text-center">{course.maMon}</td>
+                    <td className="text-left">{course.tenMon}</td>
+                    <td className="text-center">{course.soTinChi}</td>
+                    <td className="text-left">{course.tenGV}</td>
+                    <td className="text-center">{course.tenNhip}</td>
+                    <td className="text-center">{formatDate(course.ngayBatDau)} - {formatDate(course.ngayKetThuc)}</td>
+                    <td className="text-center">{formatTiet(course.tietBatDau, course.tietKetThuc)}</td>
                     <td className="text-center">{course.thu}</td>
-                    <td className="text-center">{course.soLuong}</td>
-                    <td className="text-center">{course.conTrong}</td>
-                    <td className="text-left">{course.giangVien}</td>
+                    <td className="text-center">{course.phong}</td>
+                    <td className="text-center">{course.siSoToiDa}</td>
+                    <td className="text-center">{course.soLuongTrong}</td>
                     <td className="text-center">
                       <button 
-                        className={`btn-select ${isCourseSelected(course) ? 'selected' : ''}`}
-                        onClick={() => handleSelectCourse(course, true)}
+                        className={`btn-select ${isCourseSelected(course.maMo) ? 'selected' : ''}`}
+                        onClick={() => handleSelectCourse(course.maMo)}
+                        disabled={course.soLuongTrong === 0}
                       >
                         Chọn môn
                       </button>
@@ -195,10 +255,18 @@ const DangKyMonHoc = () => {
         </div>
 
         <div className="action-buttons">
-          <button className="btn-action btn-cancel" onClick={handleCancelRegistration}>
+          <button 
+            className="btn-action btn-cancel" 
+            onClick={() => setSelectedCourses([])}
+            disabled={selectedCourses.length === 0}
+          >
             HỦY THAO TÁC
           </button>
-          <button className="btn-action btn-confirm" onClick={handleConfirmRegistration}>
+          <button 
+            className="btn-action btn-confirm" 
+            onClick={handleConfirmRegistration}
+            disabled={selectedCourses.length === 0 || loading}
+          >
             XÁC NHẬN ĐĂNG KÝ
           </button>
         </div>
@@ -214,37 +282,33 @@ const DangKyMonHoc = () => {
               <tr>
                 <th>STT</th>
                 <th>Tên học phần</th>
-                <th>Số TC</th>
-                <th>Tên lớp</th>
-                <th>Thời gian</th>
-                <th>Tiết</th>
-                <th>Thứ</th>
                 <th>Giảng viên</th>
+                <th>Ngày đăng ký</th>
+                <th>Trạng thái</th>
                 <th>Tùy chọn</th>
               </tr>
             </thead>
             <tbody>
               {pendingCourses.length === 0 ? (
                 <tr>
-                  <td colSpan="9" className="no-data">Không có học phần nào chờ phê duyệt</td>
+                  <td colSpan="6" className="no-data">Không có học phần nào chờ phê duyệt</td>
                 </tr>
               ) : (
-                pendingCourses.map((course) => (
-                  <tr key={course.stt}>
-                    <td className="text-center">{course.stt}</td>
-                    <td className="text-left">{course.maHP} - {course.tenHP}</td>
-                    <td className="text-center">{course.soTC}</td>
-                    <td className="text-center">{course.tenLop}</td>
-                    <td className="text-center">{course.thoiGian}</td>
-                    <td className="text-center">{course.tiet}</td>
-                    <td className="text-center">{course.thu}</td>
-                    <td className="text-left">{course.giangVien}</td>
+                pendingCourses.map((course, index) => (
+                  <tr key={course.id}>
+                    <td className="text-center">{index + 1}</td>
+                    <td className="text-left">{course.tenMon}</td>
+                    <td className="text-left">{course.tenGV}</td>
+                    <td className="text-center">{formatDate(course.ngayDangKy)}</td>
+                    <td className="text-center">
+                      <span className="status-badge status-pending">{course.trangThai}</span>
+                    </td>
                     <td className="text-center">
                       <button 
-                        className={`btn-select ${isCourseSelected(course) ? 'selected' : ''}`}
-                        onClick={() => handleSelectCourse(course, false)}
+                        className={`btn-select ${isCourseSelected(course.id) ? 'selected' : ''}`}
+                        onClick={() => handleSelectCourse(course.id)}
                       >
-                        Chọn môn
+                        Chọn
                       </button>
                     </td>
                   </tr>
@@ -255,10 +319,18 @@ const DangKyMonHoc = () => {
         </div>
 
         <div className="action-buttons">
-          <button className="btn-action btn-cancel" onClick={handleCancelPending}>
+          <button 
+            className="btn-action btn-cancel" 
+            onClick={() => setSelectedCourses([])}
+            disabled={selectedCourses.length === 0}
+          >
             HỦY THAO TÁC
           </button>
-          <button className="btn-action btn-confirm" onClick={handleConfirmPending}>
+          <button 
+            className="btn-action btn-confirm" 
+            onClick={handleCancelPending}
+            disabled={selectedCourses.length === 0 || loading}
+          >
             HỦY ĐĂNG KÝ
           </button>
         </div>

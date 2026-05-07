@@ -7,7 +7,6 @@ const KetQuaHocTap = () => {
   const [hocKy, setHocKy] = useState('');
   const [namHoc, setNamHoc] = useState('');
   const [chuyenNganh, setChuyenNganh] = useState('');
-  const [diemHeChot, setDiemHeChot] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(false);
   const [maSV, setMaSV] = useState('');
@@ -217,15 +216,6 @@ const KetQuaHocTap = () => {
                   <option value="">--</option>
                   <option value="CNTT">Công nghệ thông tin</option>
                   <option value="KTPM">Kỹ thuật phần mềm</option>
-                </select>
-              </div>
-
-              <div className="filter-row">
-                <label>Điểm hệ chốt:</label>
-                <select value={diemHeChot} onChange={(e) => setDiemHeChot(e.target.value)}>
-                  <option value="">--</option>
-                  <option value="4">Hệ 4</option>
-                  <option value="10">Hệ 10</option>
                 </select>
               </div>
             </div>

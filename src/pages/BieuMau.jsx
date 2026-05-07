@@ -1,159 +1,95 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './BieuMau.css'
+import { bieuMauService } from '../services/bieuMauService'
 
 const BieuMau = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [forms, setForms] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  // Categories
+  // Categories based on API
   const categories = [
     { id: 'all', name: 'Tất cả' },
-    { id: 'hoc-tap', name: 'Học tập' },
-    { id: 'hanh-chinh', name: 'Hành chính' },
-    { id: 'tai-chinh', name: 'Tài chính' },
-    { id: 'khac', name: 'Khác' }
+    { id: 'Đơn từ', name: 'Đơn từ' },
+    { id: 'Quy chế', name: 'Quy chế' },
+    { id: 'Tài liệu', name: 'Tài liệu' }
   ];
 
-  // Mock data - Danh sách biểu mẫu
-  const [forms, setForms] = useState([
-    {
-      id: 1,
-      title: 'Đơn xin nghỉ học',
-      description: 'Biểu mẫu đơn xin nghỉ học có lý do (ốm đau, việc gia đình...)',
-      category: 'hoc-tap',
-      date: '15/03/2024',
-      size: '125 KB',
-      fileType: 'PDF',
-      icon: '📄'
-    },
-    {
-      id: 2,
-      title: 'Đơn xin bảo lưu kết quả',
-      description: 'Biểu mẫu đơn xin bảo lưu kết quả học tập',
-      category: 'hoc-tap',
-      date: '10/03/2024',
-      size: '98 KB',
-      fileType: 'DOCX',
-      icon: '📝'
-    },
-    {
-      id: 3,
-      title: 'Đơn xin cấp lại thẻ sinh viên',
-      description: 'Biểu mẫu đơn xin cấp lại thẻ sinh viên khi bị mất hoặc hư hỏng',
-      category: 'hanh-chinh',
-      date: '08/03/2024',
-      size: '110 KB',
-      fileType: 'PDF',
-      icon: '🎫'
-    },
-    {
-      id: 4,
-      title: 'Đơn xin giấy xác nhận sinh viên',
-      description: 'Biểu mẫu đơn xin cấp giấy xác nhận là sinh viên đang học tại trường',
-      category: 'hanh-chinh',
-      date: '05/03/2024',
-      size: '95 KB',
-      fileType: 'PDF',
-      icon: '📋'
-    },
-    {
-      id: 5,
-      title: 'Đơn xin hoãn thi',
-      description: 'Biểu mẫu đơn xin hoãn thi có lý do chính đáng',
-      category: 'hoc-tap',
-      date: '01/03/2024',
-      size: '102 KB',
-      fileType: 'DOCX',
-      icon: '📅'
-    },
-    {
-      id: 6,
-      title: 'Đơn xin miễn giảm học phí',
-      description: 'Biểu mẫu đơn xin xét miễn giảm học phí cho sinh viên có hoàn cảnh khó khăn',
-      category: 'tai-chinh',
-      date: '28/02/2024',
-      size: '135 KB',
-      fileType: 'PDF',
-      icon: '💰'
-    },
-    {
-      id: 7,
-      title: 'Đơn xin chuyển ngành',
-      description: 'Biểu mẫu đơn xin chuyển ngành học',
-      category: 'hoc-tap',
-      date: '25/02/2024',
-      size: '118 KB',
-      fileType: 'DOCX',
-      icon: '🔄'
-    },
-    {
-      id: 8,
-      title: 'Đơn xin thôi học',
-      description: 'Biểu mẫu đơn xin thôi học có lý do',
-      category: 'hanh-chinh',
-      date: '20/02/2024',
-      size: '92 KB',
-      fileType: 'PDF',
-      icon: '🚪'
-    },
-    {
-      id: 9,
-      title: 'Đơn xin học lại',
-      description: 'Biểu mẫu đơn xin đăng ký học lại môn học',
-      category: 'hoc-tap',
-      date: '15/02/2024',
-      size: '105 KB',
-      fileType: 'DOCX',
-      icon: '🔁'
-    },
-    {
-      id: 10,
-      title: 'Đơn xin cấp bảng điểm',
-      description: 'Biểu mẫu đơn xin cấp bảng điểm tích lũy',
-      category: 'hanh-chinh',
-      date: '10/02/2024',
-      size: '88 KB',
-      fileType: 'PDF',
-      icon: '📊'
-    },
-    {
-      id: 11,
-      title: 'Đơn xin trả nợ học phí',
-      description: 'Biểu mẫu đơn xin gia hạn thời gian đóng học phí',
-      category: 'tai-chinh',
-      date: '05/02/2024',
-      size: '98 KB',
-      fileType: 'DOCX',
-      icon: '💳'
-    },
-    {
-      id: 12,
-      title: 'Đơn xin xác nhận tốt nghiệp',
-      description: 'Biểu mẫu đơn xin xác nhận đủ điều kiện tốt nghiệp',
-      category: 'hanh-chinh',
-      date: '01/02/2024',
-      size: '112 KB',
-      fileType: 'PDF',
-      icon: '🎓'
-    }
-  ]);
+  // Load biểu mẫu khi component mount hoặc khi thay đổi category
+  useEffect(() => {
+    loadBieuMau();
+  }, [selectedCategory]);
 
-  // Filter forms
+  const loadBieuMau = async () => {
+    setLoading(true);
+    try {
+      let result;
+      
+      if (selectedCategory === 'all') {
+        result = await bieuMauService.getAllBieuMau();
+      } else {
+        result = await bieuMauService.getBieuMauByLoai(selectedCategory);
+      }
+      
+      console.log('Biểu mẫu:', result);
+      
+      const code = result.code || result.Code;
+      if (code === 200 && result.result) {
+        setForms(result.result);
+      } else {
+        setForms([]);
+      }
+    } catch (error) {
+      console.error('Lỗi khi tải biểu mẫu:', error);
+      setForms([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Filter forms by search term
   const filteredForms = forms.filter(form => {
-    const matchCategory = selectedCategory === 'all' || form.category === selectedCategory;
-    const matchSearch = form.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                       form.description.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchCategory && matchSearch;
+    const matchSearch = form.tenBieuMau.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                       (form.moTa && form.moTa.toLowerCase().includes(searchTerm.toLowerCase()));
+    return matchSearch;
   });
 
+  const getFormIcon = (loai) => {
+    switch(loai) {
+      case 'Đơn từ': return '📄';
+      case 'Quy chế': return '📋';
+      case 'Tài liệu': return '📚';
+      default: return '📝';
+    }
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('vi-VN');
+  };
+
   const handleDownload = (form) => {
-    alert(`Đang tải xuống: ${form.title}`);
-    // Xử lý tải xuống file
+    if (form.linkDrive) {
+      window.open(form.linkDrive, '_blank');
+    } else {
+      alert('Liên kết tải xuống không khả dụng');
+    }
   };
 
   const handleView = (form) => {
-    alert(`Xem trước: ${form.title}`);
-    // Xử lý xem trước file
+    if (form.linkDrive) {
+      // Convert Google Drive link to preview mode
+      let viewLink = form.linkDrive;
+      if (viewLink.includes('/file/d/')) {
+        const fileId = viewLink.split('/file/d/')[1].split('/')[0];
+        viewLink = `https://drive.google.com/file/d/${fileId}/preview`;
+      }
+      window.open(viewLink, '_blank');
+    } else {
+      alert('Liên kết xem trước không khả dụng');
+    }
   };
 
   const handleSearch = () => {
@@ -199,7 +135,9 @@ const BieuMau = () => {
         </div>
 
         {/* Forms Grid */}
-        {filteredForms.length === 0 ? (
+        {loading ? (
+          <div className="loading">Đang tải biểu mẫu...</div>
+        ) : filteredForms.length === 0 ? (
           <div className="no-data">
             <div className="no-data-icon">📭</div>
             <div>Không tìm thấy biểu mẫu nào</div>
@@ -207,15 +145,17 @@ const BieuMau = () => {
         ) : (
           <div className="forms-grid">
             {filteredForms.map(form => (
-              <div key={form.id} className="form-card">
-                <div className="form-icon">{form.icon}</div>
-                <div className="form-title">{form.title}</div>
-                <div className="form-description">{form.description}</div>
+              <div key={form.maBieuMau} className="form-card">
+                <div className="form-icon">{getFormIcon(form.loaiBieuMau)}</div>
+                <div className="form-title">{form.tenBieuMau}</div>
+                <div className="form-description">{form.moTa}</div>
                 <div className="form-meta">
-                  <div className="form-date">
-                    📅 {form.date}
+                  <div className="form-category">
+                    📂 {form.loaiBieuMau}
                   </div>
-                  <div className="form-size">{form.size}</div>
+                  <div className="form-date">
+                    📅 {formatDate(form.ngayTao)}
+                  </div>
                 </div>
                 <div className="form-actions">
                   <button className="btn-view" onClick={() => handleView(form)}>

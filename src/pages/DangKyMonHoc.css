@@ -176,6 +176,50 @@
   color: white;
 }
 
+.btn-select:disabled {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.btn-select:disabled:hover {
+  transform: none;
+}
+
+.btn-action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-action:disabled:hover {
+  transform: none;
+}
+
+/* Status Badge */
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-pending {
+  background: var(--color-warning-light);
+  color: var(--color-warning-dark);
+}
+
+.status-approved {
+  background: var(--color-success-light);
+  color: var(--color-success-dark);
+}
+
+.status-rejected {
+  background: var(--color-danger-light);
+  color: var(--color-danger);
+}
+
 .loading,
 .no-data {
   text-align: center;

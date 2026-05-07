@@ -4,6 +4,7 @@ import logoChatbot from '../../assets/img/logochatbot.jpg'
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [messages, setMessages] = useState([
     { id: 1, text: 'Xin chào! Tôi có thể giúp gì cho bạn?', sender: 'bot' }
   ]);
@@ -13,6 +14,13 @@ const Chatbot = () => {
 
   const toggleChat = () => {
     setIsOpen(!isOpen);
+    if (isOpen) {
+      setIsExpanded(false); // Reset expanded state when closing
+    }
+  };
+
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
   };
 
   const handleFileSelect = (e) => {
@@ -98,7 +106,7 @@ const Chatbot = () => {
 
       {/* Chatbot Window */}
       {isOpen && (
-        <div className="chatbot-window">
+        <div className={`chatbot-window ${isExpanded ? 'expanded' : ''}`}>
           <div className="chatbot-header">
             <div className="chatbot-header-info">
               <div className="chatbot-avatar">
@@ -109,12 +117,29 @@ const Chatbot = () => {
                 <div className="chatbot-status">Đang hoạt động</div>
               </div>
             </div>
-            <button className="chatbot-close" onClick={toggleChat}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
+            <div className="chatbot-header-actions">
+              <button 
+                className="chatbot-expand" 
+                onClick={toggleExpand}
+                title={isExpanded ? "Thu nhỏ" : "Phóng to"}
+              >
+                {isExpanded ? (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path>
+                  </svg>
+                ) : (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
+                  </svg>
+                )}
+              </button>
+              <button className="chatbot-close" onClick={toggleChat}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
           </div>
 
           <div className="chatbot-messages">
