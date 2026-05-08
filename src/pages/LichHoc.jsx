@@ -234,6 +234,9 @@ const LichHoc = () => {
                               <div className="card-info">Phòng: {item.phong}</div>
                             )}
                             {item.phong === 'Online' && <div className="card-info">Học online</div>}
+                            {item.tenGiangVien && (
+                              <div className="card-info">GV: {item.tenGiangVien}</div>
+                            )}
                           </div>
                         ))}
                     </td>
@@ -258,6 +261,9 @@ const LichHoc = () => {
                               <div className="card-info">Phòng: {item.phong}</div>
                             )}
                             {item.phong === 'Online' && <div className="card-info">Học online</div>}
+                            {item.tenGiangVien && (
+                              <div className="card-info">GV: {item.tenGiangVien}</div>
+                            )}
                           </div>
                         ))}
                     </td>
@@ -282,6 +288,9 @@ const LichHoc = () => {
                               <div className="card-info">Phòng: {item.phong}</div>
                             )}
                             {item.phong === 'Online' && <div className="card-info">Học online</div>}
+                            {item.tenGiangVien && (
+                              <div className="card-info">GV: {item.tenGiangVien}</div>
+                            )}
                           </div>
                         ))}
                     </td>
