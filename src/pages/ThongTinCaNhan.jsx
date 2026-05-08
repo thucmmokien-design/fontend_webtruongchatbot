@@ -300,6 +300,8 @@ const ThongTinCaNhan = () => {
       {/* Form thông tin chi tiết */}
       <div className="info-box detail-form">
         <div className="form-section">
+          <h3 className="section-title">THÔNG TIN CÁ NHÂN</h3>
+
           <div className="form-row">
             <label>Email:</label>
             <input 
