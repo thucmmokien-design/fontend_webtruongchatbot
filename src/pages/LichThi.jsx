@@ -136,7 +136,7 @@ const LichThi = () => {
                     <td className="text-center">{exam.soTinChi || ''}</td>
                     <td className="text-center">{formatDate(exam.ngayThi)}</td>
                     <td className="text-center">{exam.gioThi || ''}</td>
-                    <td className="text-center">{exam.soBuoiDayDu || ''}</td>
+                    <td className="text-center">{exam.soBaoDanh || ''}</td>
                     <td className="text-center">{exam.phongThi || ''}</td>
                     <td className="text-center">{exam.hinhThuc || ''}</td>
                   </tr>
