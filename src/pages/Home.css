@@ -216,6 +216,7 @@
   color: var(--color-primary-dark);
   min-width: 120px;
   font-size: 14px;
+  text-align: center;
 }
 
 .schedule-details {

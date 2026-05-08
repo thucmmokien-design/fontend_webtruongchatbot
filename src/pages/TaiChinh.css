@@ -153,13 +153,13 @@
 }
 
 .status-paid {
-  color: var(--color-success);
-  font-weight: 600;
+  color: #16a34a !important;
+  font-weight: 700;
 }
 
 .status-unpaid {
-  color: var(--color-danger);
-  font-weight: 600;
+  color: #dc2626 !important;
+  font-weight: 700;
 }
 
 .btn-invoice {

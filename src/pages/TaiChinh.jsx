@@ -53,18 +53,35 @@ const TaiChinh = () => {
           });
 
           // Set danh sách học phí
-          setTuitionFees(data.danhSachHocPhi || []);
+          const tuitionFeesList = data.danhSachHocPhi || [];
+          setTuitionFees(tuitionFeesList);
 
-          // Set danh sách hóa đơn với format ngày
-          const formattedInvoices = (data.danhSachHoaDon || []).map(invoice => ({
+          // Lọc các học kỳ đã nộp
+          const paidSemesters = tuitionFeesList
+            .filter(fee => fee.trangThai === 'Đã Nộp' || fee.trangThai === 'Đã nộp')
+            .map(fee => ({ namHoc: fee.namHoc, hocKy: fee.hocKy }));
+
+          // Lọc danh sách hóa đơn theo các học kỳ đã nộp
+          const filteredInvoices = (data.danhSachHoaDon || []).filter(invoice => 
+            paidSemesters.some(semester => 
+              semester.namHoc === invoice.namHoc && semester.hocKy === invoice.hocKy
+            )
+          );
+
+          // Format ngày cho hóa đơn
+          const formattedInvoices = filteredInvoices.map(invoice => ({
             ...invoice,
             ngayNop: formatDate(invoice.ngayNop)
           }));
           setInvoices(formattedInvoices);
 
-          // Set chi tiết đã nộp - không có ngayNop và soPhieu trong API response
-          // Chỉ hiển thị thông tin môn học và tiền
-          setPaidDetails(data.chiTietDaNop || []);
+          // Lọc chi tiết đã nộp theo các học kỳ đã nộp
+          const filteredPaidDetails = (data.chiTietDaNop || []).filter(detail => 
+            paidSemesters.some(semester => 
+              semester.namHoc === detail.namHoc && semester.hocKy === detail.hocKy
+            )
+          );
+          setPaidDetails(filteredPaidDetails);
         }
       } catch (error) {
         console.error('Lỗi khi tải thông tin học phí:', error);
@@ -94,7 +111,17 @@ const TaiChinh = () => {
   };
 
   const handlePrintInvoice = (invoice) => {
-    alert(`In hóa đơn: ${invoice.soPhieu || 'N/A'}`);
+    // Link cho năm học 2024-2025
+    const link2024_2025 = 'https://drive.google.com/file/d/1b9ItG5bbqcs_zL9lxzBGraNZywtQYTk0/view?usp=drive_link';
+    // Link cho các năm học khác
+    const linkOther = 'https://drive.google.com/file/d/1PPJ2lxDMgqUDFEydhu5ztxpDZkbI6Ofb/view?usp=drive_link';
+    
+    // Kiểm tra năm học và mở link tương ứng
+    if (invoice.namHoc === '2024-2025') {
+      window.open(link2024_2025, '_blank');
+    } else {
+      window.open(linkOther, '_blank');
+    }
   };
 
   return (
@@ -198,44 +225,48 @@ const TaiChinh = () => {
               </table>
             </div>
 
-            {/* Paid Details */}
-            <h3 className="section-title">Chi tiết các khoản đã nộp:</h3>
-            <div className="table-wrapper">
-              <table className="finance-table">
-                <thead>
-                  <tr>
-                    <th>Năm học</th>
-                    <th>Học kỳ</th>
-                    <th>Mã lớp HP</th>
-                    <th>Tên học phần</th>
-                    <th>Số tín chỉ</th>
-                    <th>Số tiền/TC</th>
-                    <th>Mức giảm</th>
-                    <th>Số tiền thực nộp</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {paidDetails.length === 0 ? (
-                    <tr>
-                      <td colSpan="8" className="no-data">Không có dữ liệu</td>
-                    </tr>
-                  ) : (
-                    paidDetails.map((detail, index) => (
-                      <tr key={index}>
-                        <td className="text-center">{detail.namHoc}</td>
-                        <td className="text-center">{detail.hocKy}</td>
-                        <td className="text-center">{detail.maLopHP}</td>
-                        <td className="text-left">{detail.tenHocPhan}</td>
-                        <td className="text-center">{detail.soTinChi}</td>
-                        <td className="text-right">{formatCurrency(detail.soTienNop)}</td>
-                        <td className="text-right">{formatCurrency(detail.mienGiam)}</td>
-                        <td className="text-right">{formatCurrency(detail.soTienThucNop)}</td>
+            {/* Paid Details - Chỉ hiển thị khi có học phí đã nộp */}
+            {tuitionFees.some(fee => fee.trangThai === 'Đã Nộp' || fee.trangThai === 'Đã nộp') && (
+              <>
+                <h3 className="section-title">Chi tiết các khoản đã nộp:</h3>
+                <div className="table-wrapper">
+                  <table className="finance-table">
+                    <thead>
+                      <tr>
+                        <th>Năm học</th>
+                        <th>Học kỳ</th>
+                        <th>Mã lớp HP</th>
+                        <th>Tên học phần</th>
+                        <th>Số tín chỉ</th>
+                        <th>Số tiền/TC</th>
+                        <th>Mức giảm</th>
+                        <th>Số tiền thực nộp</th>
                       </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
+                    </thead>
+                    <tbody>
+                      {paidDetails.length === 0 ? (
+                        <tr>
+                          <td colSpan="8" className="no-data">Không có dữ liệu</td>
+                        </tr>
+                      ) : (
+                        paidDetails.map((detail, index) => (
+                          <tr key={index}>
+                            <td className="text-center">{detail.namHoc}</td>
+                            <td className="text-center">{detail.hocKy}</td>
+                            <td className="text-center">{detail.maLopHP}</td>
+                            <td className="text-left">{detail.tenHocPhan}</td>
+                            <td className="text-center">{detail.soTinChi}</td>
+                            <td className="text-right">{formatCurrency(detail.soTienNop)}</td>
+                            <td className="text-right">{formatCurrency(detail.mienGiam)}</td>
+                            <td className="text-right">{formatCurrency(detail.soTienThucNop)}</td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            )}
           </>
         )}
       </div>
