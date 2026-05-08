@@ -194,7 +194,7 @@ const LichHoc = () => {
 
           <div className="filter-actions">
             <button className="btn-view" onClick={() => navigate('/dashboard/lich-thi')}>XEM LỊCH THI</button>
-            <button className="btn-print">IN TKB</button>
+            <button className="btn-print" onClick={() => window.print()}>IN TKB</button>
           </div>
         </div>
 

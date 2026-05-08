@@ -188,21 +188,59 @@
 
 /* Print styles */
 @media print {
-  .lichthi-filters,
-  .btn-print {
-    display: none;
+  /* Ẩn tất cả trừ bảng lịch thi */
+  body * {
+    visibility: hidden;
   }
-
-  .lichthi-container {
-    padding: 10px;
+  
+  .exam-table-wrapper,
+  .exam-table-wrapper * {
+    visibility: visible;
   }
-
+  
   .exam-table-wrapper {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
     box-shadow: none;
+    border-radius: 0;
   }
-
+  
+  /* Điều chỉnh bảng cho in */
   .exam-table {
+    width: 100%;
     min-width: auto;
+    border-collapse: collapse;
+  }
+  
+  .exam-table th,
+  .exam-table td {
+    border: 1px solid #000;
+    padding: 10px 8px;
+    font-size: 11px;
+  }
+  
+  .exam-table thead {
+    background: #f0f0f0 !important;
+    color: #000 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .exam-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  /* Đảm bảo không bị cắt trang giữa các hàng */
+  .exam-table tr {
+    page-break-inside: avoid;
+  }
+  
+  .exam-table td {
+    color: #000;
   }
 }
 
