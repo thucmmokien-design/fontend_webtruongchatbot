@@ -12,6 +12,16 @@ const ThongTinCaNhan = () => {
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
+  // Format ngày từ ISO string sang dd/mm/yyyy
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
   useEffect(() => {
     const fetchAllInfo = async () => {
       setLoading(true);
@@ -25,36 +35,44 @@ const ThongTinCaNhan = () => {
 
       // Lấy thông tin cá nhân chi tiết
       const detailInfo = await studentService.getThongTinCaNhan();
+      console.log('Detail Info:', detailInfo);
       if (detailInfo.success) {
-        setFormData(prev => ({ ...prev, ...detailInfo.data }));
+        setFormData(prev => ({ 
+          ...prev, 
+          ...detailInfo.data,
+          nganHang: detailInfo.data.tenNganHang || detailInfo.data.nganHang, // Map tenNganHang -> nganHang
+          hoKhauTT: detailInfo.data.hoKhauThuongTru || detailInfo.data.hoKhauTT // Map hoKhauThuongTru -> hoKhauTT
+        }));
       }
 
       // Lấy thông tin người thân
       const nguoiThanInfo = await studentService.getNguoiThan();
-      if (nguoiThanInfo.success && nguoiThanInfo.data.length > 0) {
+      console.log('Nguoi Than Info:', nguoiThanInfo);
+      if (nguoiThanInfo.success && nguoiThanInfo.data && nguoiThanInfo.data.length > 0) {
         const nguoiThan = nguoiThanInfo.data[0]; // Lấy người thân đầu tiên
         setFormData(prev => ({
           ...prev,
           nguoiThan_hoTen: nguoiThan.hoTen,
           nguoiThan_ngaySinh: nguoiThan.ngaySinh,
-          nguoiThan_sdt: nguoiThan.sdt,
-          nguoiThan_cccd: nguoiThan.cccd,
-          nguoiThan_hoKhau: nguoiThan.hoKhau,
+          nguoiThan_sdt: nguoiThan.dienThoai || nguoiThan.sdt,
+          nguoiThan_cccd: nguoiThan.soCCCD || nguoiThan.cccd,
+          nguoiThan_hoKhau: nguoiThan.hoKhauThuongTru || nguoiThan.hoKhau,
           nguoiThan_moiQuanHe: nguoiThan.moiQuanHe
         }));
       }
 
       // Lấy thông tin người giám hộ
       const giamHoInfo = await studentService.getNguoiGiamHo();
-      if (giamHoInfo.success && giamHoInfo.data.length > 0) {
+      console.log('Giam Ho Info:', giamHoInfo);
+      if (giamHoInfo.success && giamHoInfo.data && giamHoInfo.data.length > 0) {
         const giamHo = giamHoInfo.data[0]; // Lấy người giám hộ đầu tiên
         setFormData(prev => ({
           ...prev,
           giamHo_hoTen: giamHo.hoTen,
           giamHo_ngaySinh: giamHo.ngaySinh,
-          giamHo_sdt: giamHo.sdt,
-          giamHo_cccd: giamHo.cccd,
-          giamHo_hoKhau: giamHo.hoKhau,
+          giamHo_sdt: giamHo.dienThoai || giamHo.sdt,
+          giamHo_cccd: giamHo.soCCCD || giamHo.cccd,
+          giamHo_hoKhau: giamHo.hoKhauThuongTru || giamHo.hoKhau,
           giamHo_moiQuanHe: giamHo.moiQuanHe
         }));
       }
@@ -78,10 +96,62 @@ const ThongTinCaNhan = () => {
     setMessage('');
   };
 
-  const handleCancel = () => {
+  const handleCancel = async () => {
     setIsEditing(false);
-    setFormData(studentInfo); // Reset về dữ liệu gốc
     setMessage('');
+    
+    // Reload lại tất cả thông tin
+    setLoading(true);
+    
+    // Lấy thông tin cơ bản
+    const basicInfo = await studentService.getMyInfo();
+    if (basicInfo.success) {
+      setStudentInfo(basicInfo.data);
+      setFormData(prev => ({ ...prev, ...basicInfo.data }));
+    }
+
+    // Lấy thông tin cá nhân chi tiết
+    const detailInfo = await studentService.getThongTinCaNhan();
+    if (detailInfo.success) {
+      setFormData(prev => ({ 
+        ...prev, 
+        ...detailInfo.data,
+        nganHang: detailInfo.data.tenNganHang || detailInfo.data.nganHang,
+        hoKhauTT: detailInfo.data.hoKhauThuongTru || detailInfo.data.hoKhauTT
+      }));
+    }
+
+    // Lấy thông tin người thân
+    const nguoiThanInfo = await studentService.getNguoiThan();
+    if (nguoiThanInfo.success && nguoiThanInfo.data && nguoiThanInfo.data.length > 0) {
+      const nguoiThan = nguoiThanInfo.data[0];
+      setFormData(prev => ({
+        ...prev,
+        nguoiThan_hoTen: nguoiThan.hoTen,
+        nguoiThan_ngaySinh: nguoiThan.ngaySinh,
+        nguoiThan_sdt: nguoiThan.dienThoai || nguoiThan.sdt,
+        nguoiThan_cccd: nguoiThan.soCCCD || nguoiThan.cccd,
+        nguoiThan_hoKhau: nguoiThan.hoKhauThuongTru || nguoiThan.hoKhau,
+        nguoiThan_moiQuanHe: nguoiThan.moiQuanHe
+      }));
+    }
+
+    // Lấy thông tin người giám hộ
+    const giamHoInfo = await studentService.getNguoiGiamHo();
+    if (giamHoInfo.success && giamHoInfo.data && giamHoInfo.data.length > 0) {
+      const giamHo = giamHoInfo.data[0];
+      setFormData(prev => ({
+        ...prev,
+        giamHo_hoTen: giamHo.hoTen,
+        giamHo_ngaySinh: giamHo.ngaySinh,
+        giamHo_sdt: giamHo.dienThoai || giamHo.sdt,
+        giamHo_cccd: giamHo.soCCCD || giamHo.cccd,
+        giamHo_hoKhau: giamHo.hoKhauThuongTru || giamHo.hoKhau,
+        giamHo_moiQuanHe: giamHo.moiQuanHe
+      }));
+    }
+
+    setLoading(false);
   };
 
   const handleSave = async () => {
@@ -181,7 +251,7 @@ const ThongTinCaNhan = () => {
         <div className="info-row">
           <div className="info-col">
             <span className="label">Ngày sinh:</span>
-            <span className="value">{studentInfo?.ngaySinh || 'N/A'}</span>
+            <span className="value">{formatDate(studentInfo?.ngaySinh)}</span>
           </div>
           <div className="info-col">
             <span className="label">Chuyên ngành chính:</span>
@@ -417,13 +487,21 @@ const ThongTinCaNhan = () => {
 
           <div className="form-row">
             <label>Ngày sinh:</label>
-            <input 
-              type="date"
-              name="nguoiThan_ngaySinh"
-              value={formData?.nguoiThan_ngaySinh || ''} 
-              onChange={handleInputChange}
-              disabled={!isEditing}
-            />
+            {isEditing ? (
+              <input 
+                type="date"
+                name="nguoiThan_ngaySinh"
+                value={formData?.nguoiThan_ngaySinh?.split('T')[0] || ''} 
+                onChange={handleInputChange}
+                max={new Date().toISOString().split('T')[0]}
+              />
+            ) : (
+              <input 
+                type="text"
+                value={formatDate(formData?.nguoiThan_ngaySinh)}
+                disabled
+              />
+            )}
           </div>
 
           <div className="form-row">
@@ -490,13 +568,21 @@ const ThongTinCaNhan = () => {
 
           <div className="form-row">
             <label>Ngày sinh:</label>
-            <input 
-              type="date"
-              name="giamHo_ngaySinh"
-              value={formData?.giamHo_ngaySinh || ''} 
-              onChange={handleInputChange}
-              disabled={!isEditing}
-            />
+            {isEditing ? (
+              <input 
+                type="date"
+                name="giamHo_ngaySinh"
+                value={formData?.giamHo_ngaySinh?.split('T')[0] || ''} 
+                onChange={handleInputChange}
+                max={new Date().toISOString().split('T')[0]}
+              />
+            ) : (
+              <input 
+                type="text"
+                value={formatDate(formData?.giamHo_ngaySinh)}
+                disabled
+              />
+            )}
           </div>
 
           <div className="form-row">

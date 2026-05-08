@@ -94,18 +94,6 @@ function Footer() {
             </div>
           </div>
           <hr />
-          <p className="contact_end">
-            <span>Đơn vị phát triển: <a href="https://namvietjsc.edu.vn/" target="_blank">CÔNG TY CỔ PHẦN GIẢI PHÁP VIỆT NAM</a>
-            </span>
-            <span> <img src={addresss} alt="" />Tầng 2, Khu nhà ở Liên hợp 262 Nguyễn Huy Tưởng, Thanh Xuân Trung, Thanh Xuân, Hà Nội 
-            </span>
-            <span>
-                <img src={call} alt="" />0432 065 065
-            </span>
-            <span>
-                <img src={book} alt="" />Fax: 0432 020 066
-            </span>
-            </p>
         </div>
     </footer>
   );

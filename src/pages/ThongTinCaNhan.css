@@ -180,6 +180,11 @@
   transition: all 0.3s ease;
 }
 
+.btn-cancel {
+  padding: 10px 30px;
+  font-size: 14px;
+}
+
 .btn-edit {
   background: var(--color-success);
   color: white;

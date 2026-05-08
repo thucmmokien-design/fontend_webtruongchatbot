@@ -73,10 +73,43 @@ const DangKyMonHoc = () => {
     }
   };
 
+  // Kiểm tra xem môn học có trùng lịch với các môn đã chọn không
+  const checkScheduleConflict = (course) => {
+    // Lấy danh sách các môn đã chọn
+    const selectedCoursesData = availableCourses.filter(c => selectedCourses.includes(c.maMo));
+    
+    // Kiểm tra trùng thứ và trùng tiết
+    for (const selected of selectedCoursesData) {
+      // Nếu cùng thứ
+      if (selected.thu === course.thu) {
+        // Kiểm tra trùng tiết
+        const isOverlap = !(
+          course.tietKetThuc < selected.tietBatDau || 
+          course.tietBatDau > selected.tietKetThuc
+        );
+        
+        if (isOverlap) {
+          return true; // Có trùng lịch
+        }
+      }
+    }
+    
+    return false; // Không trùng lịch
+  };
+
   const handleSelectCourse = (maMo) => {
+    const course = availableCourses.find(c => c.maMo === maMo);
+    
     if (selectedCourses.includes(maMo)) {
+      // Bỏ chọn
       setSelectedCourses(selectedCourses.filter(id => id !== maMo));
     } else {
+      // Kiểm tra trùng lịch trước khi chọn
+      if (checkScheduleConflict(course)) {
+        alert(`Không thể chọn môn "${course.tenMon}" vì trùng lịch với môn đã chọn!\n\nThứ ${course.thu}, Tiết ${course.tietBatDau}-${course.tietKetThuc}`);
+        return;
+      }
+      
       setSelectedCourses([...selectedCourses, maMo]);
     }
   };

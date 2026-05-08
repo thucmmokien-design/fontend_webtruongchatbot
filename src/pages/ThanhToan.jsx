@@ -162,7 +162,17 @@ const ThanhToan = () => {
             {/* Total Amount - Centered */}
             <div className="total-amount-section">
               <span className="total-label">Tổng tiền cần thanh toán:</span>
-              <span className="total-value">{formatCurrency(paymentData.tongThucNop)}</span>
+              <span className="total-value">
+                {paymentData.trangThai === 'Đã Nộp' || paymentData.trangThai === 'Đã nộp' 
+                  ? '0 đ' 
+                  : formatCurrency(paymentData.tongThucNop)
+                }
+              </span>
+              {(paymentData.trangThai === 'Đã Nộp' || paymentData.trangThai === 'Đã nộp') && (
+                <div style={{marginTop: '10px', fontSize: '16px', color: '#16a34a', fontWeight: '600'}}>
+                  ✓ Đã thanh toán
+                </div>
+              )}
             </div>
 
             {/* Payment Summary */}

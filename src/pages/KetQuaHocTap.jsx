@@ -6,7 +6,7 @@ import { bangDiemService } from '../services/bangDiemService'
 const KetQuaHocTap = () => {
   const [hocKy, setHocKy] = useState('');
   const [namHoc, setNamHoc] = useState('');
-  const [chuyenNganh, setChuyenNganh] = useState('');
+  const [chuyenNganh, setChuyenNganh] = useState('CNTT'); // Mặc định CNTT
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(false);
   const [maSV, setMaSV] = useState('');
@@ -178,6 +178,32 @@ const KetQuaHocTap = () => {
     return matchHocKy && matchNamHoc && matchSearch;
   });
 
+  // Tính toán lại thông số khi thay đổi filter
+  useEffect(() => {
+    // Lọc lại courses dựa trên hocKy và namHoc
+    const filtered = completedCourses.filter(course => {
+      const matchHocKy = !hocKy || course.hocKy.includes(`Học kỳ ${hocKy}`);
+      const matchNamHoc = !namHoc || course.namHoc === namHoc;
+      return matchHocKy && matchNamHoc;
+    });
+
+    if (filtered.length > 0) {
+      calculateStats(filtered);
+    } else if (hocKy || namHoc) {
+      // Nếu có filter nhưng không có kết quả, reset stats
+      setStats({
+        kqhtHe4: 0,
+        kqhtHe10: 0,
+        stcHocTap: 0,
+        stcTichLuy: 0,
+        xepLoaiHe4: '',
+        xepLoaiHe10: '',
+        diemKhenThuong: 0,
+        diemRenLuyen: 0
+      });
+    }
+  }, [hocKy, namHoc, completedCourses]);
+
   return (
     <div className="ketqua-container">
       <div className="ketqua-content">
@@ -278,7 +304,6 @@ const KetQuaHocTap = () => {
                 <th>Tên môn</th>
                 <th>STC</th>
                 <th>Mã lớp HP</th>
-                <th>Giảng viên</th>
                 <th>Loại môn</th>
                 <th>Điểm QT</th>
                 <th>Điểm thi</th>
@@ -286,18 +311,16 @@ const KetQuaHocTap = () => {
                 <th>Điểm (Hệ 4)</th>
                 <th>Điểm (Hệ 10)</th>
                 <th>Xếp loại</th>
-                <th>Học kỳ</th>
-                <th>Năm học</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan="15" className="no-data">Đang tải dữ liệu...</td>
+                  <td colSpan="12" className="no-data">Đang tải dữ liệu...</td>
                 </tr>
               ) : filteredCourses.length === 0 ? (
                 <tr>
-                  <td colSpan="15" className="no-data">Không có dữ liệu</td>
+                  <td colSpan="12" className="no-data">Không có dữ liệu</td>
                 </tr>
               ) : (
                 filteredCourses.map((course) => (
@@ -307,7 +330,6 @@ const KetQuaHocTap = () => {
                     <td className="text-left">{course.tenMon}</td>
                     <td className="text-center">{course.soTinChi}</td>
                     <td>{course.maLopHP}</td>
-                    <td className="text-left">{course.tenGiangVien}</td>
                     <td className="text-center">{course.loaiMon}</td>
                     <td className="text-center">{course.diemQT}</td>
                     <td className="text-center">{course.diemThi}</td>
@@ -315,8 +337,6 @@ const KetQuaHocTap = () => {
                     <td className="text-center">{course.diemHe4}</td>
                     <td className="text-center">{course.diemHe10}</td>
                     <td className="text-center">{course.xepLoai}</td>
-                    <td className="text-center">{course.hocKy}</td>
-                    <td className="text-center">{course.namHoc}</td>
                   </tr>
                 ))
               )}

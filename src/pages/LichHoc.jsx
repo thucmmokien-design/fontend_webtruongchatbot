@@ -9,8 +9,8 @@ const LichHoc = () => {
   const [schedule, setSchedule] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentWeek, setCurrentWeek] = useState(0);
-  const [hocKy, setHocKy] = useState('');
-  const [namHoc, setNamHoc] = useState('');
+  const [hocKy, setHocKy] = useState('2'); // Mặc định Học kỳ 2
+  const [namHoc, setNamHoc] = useState('2025-2026'); // Mặc định năm 2025-2026
   const [nhipHoc, setNhipHoc] = useState('');
   const [totalWeeks, setTotalWeeks] = useState(1);
   const [semesterStartDate, setSemesterStartDate] = useState(null);

@@ -6,8 +6,8 @@ import { lichThiService } from '../services/lichThiService'
 const LichThi = () => {
   const [examSchedule, setExamSchedule] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [hocKy, setHocKy] = useState('');
-  const [namHoc, setNamHoc] = useState('');
+  const [hocKy, setHocKy] = useState('2'); // Mặc định Học kỳ 2
+  const [namHoc, setNamHoc] = useState('2025-2026'); // Mặc định năm 2025-2026
   const [maSV, setMaSV] = useState('');
 
   // Load mã sinh viên khi component mount

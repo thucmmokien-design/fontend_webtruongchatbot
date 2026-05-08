@@ -17,7 +17,8 @@
   padding: 10px 16px;
   border-radius: 10px;
   color: var(--color-text-secondary);
-  font-weight: 500;
+  font-weight: 700;
+  font-size: 15px;
   transition: all 0.3s ease;
   text-decoration: none;
 }
@@ -33,7 +34,7 @@
 .nav-link.active {
   color: var(--color-bg-primary);
   background-color: var(--color-primary-dark);
-  font-weight: 700;
+  font-weight: 800;
   box-shadow: var(--shadow-primary-lg);
 }
 
