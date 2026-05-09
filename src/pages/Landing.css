@@ -6,34 +6,45 @@
   margin: 0;
 }
 
-/* Override home container for landing page */
+/* Override home container for landing page - căn giữa như Home */
 .container-fluid .home-container {
   width: 100%;
-  max-width: 100%;
-  padding: 20px 40px;
-  margin: 0;
+  padding: 20px;
+  min-height: calc(100vh - 200px);
 }
 
 .container-fluid .home-content {
-  max-width: 100%;
-  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  align-items: start;
 }
 
 /* Responsive */
 @media (max-width: 1024px) {
-  .container-fluid .home-container {
-    padding: 20px 30px;
+  .container-fluid .home-content {
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 768px) {
   .container-fluid .home-container {
-    padding: 15px 20px;
+    padding: 15px;
+  }
+
+  .container-fluid .home-content {
+    gap: 20px;
   }
 }
 
 @media (max-width: 480px) {
   .container-fluid .home-container {
-    padding: 10px 15px;
+    padding: 10px;
+  }
+
+  .container-fluid .home-content {
+    gap: 15px;
   }
 }
