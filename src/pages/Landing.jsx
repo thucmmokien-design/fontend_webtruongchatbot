@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import './Home.css'
+import './Landing.css'
 import { NavLink } from 'react-router-dom'
 import HeaderPublic from '../components/Header/HeaderPublic.jsx'
 import Footer from '../components/Footer/Footer.jsx'

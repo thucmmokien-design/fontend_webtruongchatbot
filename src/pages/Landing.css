@@ -1,0 +1,39 @@
+/* Landing Page - Full Width Container */
+.container-fluid {
+  width: 100%;
+  max-width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+/* Override home container for landing page */
+.container-fluid .home-container {
+  width: 100%;
+  max-width: 100%;
+  padding: 20px 40px;
+  margin: 0;
+}
+
+.container-fluid .home-content {
+  max-width: 100%;
+  width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .container-fluid .home-container {
+    padding: 20px 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container-fluid .home-container {
+    padding: 15px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container-fluid .home-container {
+    padding: 10px 15px;
+  }
+}
