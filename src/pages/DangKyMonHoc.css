@@ -33,7 +33,7 @@
 
 .section-note {
   font-size: 13px;
-  color: var(--color-text-muted);
+  color: var(--color-bg-primary);
   font-style: italic;
 }
 
